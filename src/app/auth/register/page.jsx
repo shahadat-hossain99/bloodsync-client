@@ -23,6 +23,8 @@ import {
 } from "react-icons/fa";
 import { useGeoData } from "@/hooks/useGeoData";
 import { uploadImageToImgBB } from "@/lib/imageUpload";
+import { signUp } from "@/lib/auth-client";
+import Image from "next/image";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const genders = ["Male", "Female", "Other"];
@@ -184,44 +186,68 @@ export default function RegisterPage() {
         setIsUploading(false);
       }
 
-      const userData = {
-        name: formData.name,
-        email: formData.email,
-        avatar: avatarUrl,
+      //!   const userData = {
+      //     name: formData.name,
+      //     email: formData.email,
+      //     avatar: avatarUrl,
+      //     phone: formData.phone,
+      //     gender: formData.gender,
+      //     bloodGroup: formData.bloodGroup,
+      //     district: formData.districtName,
+      //     upazila: formData.upazilaName,
+      //     password: formData.password,
+      //     role: "donor",
+      //     status: "active",
+      //   };
+
+      //   const response = await fetch(
+      //     `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(userData),
+      //     },
+      //   );
+      //    const result = await response.json();
+
+      const { data, error } = await signUp.email({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        image: avatarUrl, // 'image' is the default field Better Auth uses for profiles
+
+        // Pass your app's custom schema properties directly here
+        role: "donor",
+        status: "active",
         phone: formData.phone,
         gender: formData.gender,
         bloodGroup: formData.bloodGroup,
         district: formData.districtName,
         upazila: formData.upazilaName,
-        password: formData.password,
-        role: "donor",
-        status: "active",
-      };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        },
-      );
+        // Tell Better Auth where to send the user once authenticated successfully
+        //   callbackURL: "/dashboard",
+      });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success("Registration successful! Redirecting to login...");
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-      } else {
-        toast.error(result.message || "Registration failed");
+      // 3. Handle errors returned straight from the Auth Engine
+      if (error) {
+        toast.error(error.message || "Registration failed");
+        return;
       }
+
+      // 4. Success state management
+      // Better Auth handles immediate background sessions perfectly.
+      // If you don't use callbackURL parameter above, you can route them manually:
+
+      toast.success("Registration successful! Redirecting to login...");
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("Network error. Please try again.");
+      console.error("Registration error encountered:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -271,12 +297,14 @@ export default function RegisterPage() {
             {/* Avatar Upload */}
             <div className="flex flex-col items-center gap-3">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-red-50 border-2 border-dashed border-red-200 flex items-center justify-center overflow-hidden">
+                <div className="w-24 h-24 rounded-full bg-red-50 border-2 border-dashed border-red-200 flex items-center justify-center overflow-hidden relative">
                   {avatarPreview ? (
-                    <img
+                    <Image
                       src={avatarPreview}
                       alt="Avatar preview"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="96px"
                     />
                   ) : (
                     <FaImage className="text-red-300 text-3xl" />
@@ -675,7 +703,7 @@ export default function RegisterPage() {
 
           {/* Login Link */}
           <Link
-            href="/login"
+            href="/auth/signin"
             className="block w-full py-2.5 border-2 border-red-200 text-red-600 font-semibold text-sm rounded-lg hover:bg-red-50 transition-colors duration-300 text-center"
           >
             Login to Your Account
