@@ -1,4 +1,4 @@
-import { serverFetch } from "@/lib/core/server";
+import { protectedFetch, serverFetch } from "@/lib/core/server";
 import { redirect } from "next/navigation";
 import DonationRequestDetailsClient from "./DonationRequestDetailsClient";
 import { getUserSession } from "@/lib/core/session";
@@ -35,7 +35,7 @@ export default async function DonationRequestDetailsPage({ params }) {
   // 3. Fetch the request data
   let requestData = null;
   try {
-    requestData = await serverFetch(`/api/donation-requests/${id}`);
+    requestData = await protectedFetch(`/api/donation-requests/${id}`);
   } catch (error) {
     // If request not found, redirect to home or list
     console.error("Failed to fetch request:", error);

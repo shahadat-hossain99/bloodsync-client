@@ -16,6 +16,33 @@ export const authHeader = async () => {
   return header;
 };
 
+const handleStatusCode = (res, errorData = {}) => {
+  const errorMessage =
+    errorData.message || `Request failed with status ${res.status}`;
+
+  switch (res.status) {
+    case 401:
+      console.warn("Unauthorized request. Access tokens may be expired.");
+      redirect("/unauthorized"); // ✅ Removed window check
+      break;
+    case 403:
+      console.warn("Forbidden. You do not have permission.");
+      redirect("/forbidden"); // ✅ Removed window check
+      break;
+    case 404:
+      console.warn("Resource not found.");
+      redirect("/not-found"); // ✅ Removed window check
+      break;
+    case 500:
+      console.error("Internal Server Error.");
+      break;
+    default:
+      console.error(`HTTP Error: ${res.status}`);
+  }
+
+  throw new Error(errorMessage);
+};
+
 export const serverFetch = async (path) => {
   try {
     const res = await fetch(`${baseURL}${path}`);
@@ -40,24 +67,39 @@ export const serverFetch = async (path) => {
 };
 
 export const protectedFetch = async (path) => {
-  const res = await fetch(`${baseURL}${path}`, {
-    headers: await authHeader(),
-  });
-  // Handle 401, 403, 404, 500 network exceptions safely
+  try {
+    const res = await fetch(`${baseURL}${path}`, {
+      headers: await authHeader(),
+    });
 
-  return res.json();
+    if (!res.ok) {
+      let errorData;
+      try {
+        errorData = await res.json();
+      } catch {
+        errorData = {};
+      }
+      handleStatusCode(res, errorData);
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error(`Protected Fetch error at ${path}:`, error);
+    throw error;
+  }
 };
 
 /**
  * Core utility for mutating data (POST, PUT, PATCH, DELETE) with robust error handling.
  */
+
+// Updated serverMutation using the utility
 export const serverMutation = async (path, data, method = "POST") => {
   try {
-    // ✅ Print to console to verify the method is actually "PATCH"
     console.log(`🚀 Request Method: ${method} | URL: ${baseURL}${path}`);
 
     const res = await fetch(`${baseURL}${path}`, {
-      method: method, // ✅ Now correctly sends PATCH / DELETE
+      method: method,
       headers: {
         "Content-Type": "application/json",
         ...(await authHeader()),
@@ -65,7 +107,6 @@ export const serverMutation = async (path, data, method = "POST") => {
       body: data ? JSON.stringify(data) : undefined,
     });
 
-    // Handle 401, 403, 404, 500 network exceptions safely
     if (!res.ok) {
       let errorData;
       try {
@@ -73,34 +114,9 @@ export const serverMutation = async (path, data, method = "POST") => {
       } catch {
         errorData = { message: "An unknown error occurred" };
       }
-
-      switch (res.status) {
-        case 401:
-          console.warn("Unauthorized request. Access tokens may be expired.");
-          break;
-        case 403:
-          console.warn(
-            "Forbidden. You do not have permission to execute this operation.",
-          );
-          break;
-        case 404:
-          console.warn("The requested resource endpoint could not be found.");
-          break;
-        case 500:
-          console.error(
-            "Internal Server Error encountered on the backend framework.",
-          );
-          break;
-        default:
-          console.error(`HTTP Error: ${res.status}`);
-      }
-
-      throw new Error(
-        errorData.message || `Mutation failed with status ${res.status}`,
-      );
+      handleStatusCode(res, errorData);
     }
 
-    // Protect against syntax crashes on empty responses (like 204 No Content)
     if (res.status === 204) {
       return { success: true };
     }
@@ -109,14 +125,5 @@ export const serverMutation = async (path, data, method = "POST") => {
   } catch (error) {
     console.error(`Mutation failed at [${method}] ${path}:`, error);
     throw error;
-  }
-};
-
-// handle 401 ,404, 403
-
-const handleStatusCode = (res) => {
-  if (res.status === 401) {
-    redirect("/unauthorized");
-  } else {
   }
 };

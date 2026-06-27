@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { serverFetch, serverMutation } from "@/lib/core/server";
+import { protectedFetch, serverFetch, serverMutation } from "@/lib/core/server";
 import {
   FaSpinner,
   FaUser,
@@ -45,7 +45,7 @@ export default function AllUsersClient() {
         url += `&status=${status}`;
       }
 
-      const response = await serverFetch(url);
+      const response = await protectedFetch(url);
 
       if (response.success) {
         setUsers(response.data);

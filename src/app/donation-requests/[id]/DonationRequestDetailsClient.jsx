@@ -20,8 +20,8 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { setDonationInProgress } from "@/lib/action/donetion";
-import { donateBloodAction } from "@/lib/action/donation.action";
+// import { setDonationInProgress } from "@/lib/action/donetion";
+// import { donateBloodAction } from "@/lib/action/donation.action";
 
 export default function DonationRequestDetailsClient({
   request,
@@ -62,13 +62,13 @@ export default function DonationRequestDetailsClient({
       };
       // Call the PATCH API
 
-      // const response = await serverMutation(
-      //   `/api/donation-requests/${request._id}`,
-      //   payload,
-      //   "PATCH",
-      // );
+      const response = await serverMutation(
+        `/api/donation-requests/${request._id}`,
+        payload,
+        "PATCH",
+      );
       // Call the server action directly (do NOT use serverMutation here)
-      const response = await donateBloodAction(request._id, payload);
+      // const response = await donateBloodAction(request._id, payload);
 
       if (response.success) {
         toast.success("You have successfully volunteered to donate! 🩸");
