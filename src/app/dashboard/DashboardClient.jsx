@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { serverFetch } from "@/lib/core/server";
+import { protectedFetch, serverFetch } from "@/lib/core/server";
 import {
   FaUsers,
   FaMoneyBillWave,
@@ -120,7 +120,7 @@ export default function DashboardClient({ user }) {
       const [donorsRes, fundingRes, requestsRes, statusRes, weeklyRes] =
         await Promise.all([
           serverFetch("/api/users/count"),
-          serverFetch("/api/funding/total"),
+          protectedFetch("/api/funding/total"),
           serverFetch("/api/donation-requests/count"),
           serverFetch("/api/donation-requests/status-breakdown"),
           serverFetch("/api/donation-requests/weekly-stats"),

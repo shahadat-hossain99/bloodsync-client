@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { getUserToken } from "./session";
 
 const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
@@ -36,6 +37,15 @@ export const serverFetch = async (path) => {
     console.error(`Server Fetch error at ${path}:`, error);
     throw error;
   }
+};
+
+export const protectedFetch = async (path) => {
+  const res = await fetch(`${baseURL}${path}`, {
+    headers: await authHeader(),
+  });
+  // Handle 401, 403, 404, 500 network exceptions safely
+
+  return res.json();
 };
 
 /**
@@ -99,5 +109,14 @@ export const serverMutation = async (path, data, method = "POST") => {
   } catch (error) {
     console.error(`Mutation failed at [${method}] ${path}:`, error);
     throw error;
+  }
+};
+
+// handle 401 ,404, 403
+
+const handleStatusCode = (res) => {
+  if (res.status === 401) {
+    redirect("/unauthorized");
+  } else {
   }
 };
