@@ -11,7 +11,7 @@ import {
   FaHospital,
 } from "react-icons/fa";
 
-const Banner = () => {
+const Banner = ({ stats = {} }) => {
   return (
     <section className="relative min-h-screen bg-linear-to-br from-[#0a0f1a] via-[#1a1f2e] to-[#0d1117] flex items-center overflow-hidden pb-20 lg:pb-0">
       {/* Background Elements */}
@@ -78,9 +78,34 @@ const Banner = () => {
               className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6"
             >
               {[
-                { icon: FaUsers, number: "5,000+", label: "Donors" },
-                { icon: FaHeartbeat, number: "2,500+", label: "Lives Saved" },
-                { icon: FaHospital, number: "50+", label: "Hospitals" },
+                {
+                  icon: FaUsers,
+                  number: stats.totalDonors
+                    ? `${stats.totalDonors.toLocaleString()}+`
+                    : "...",
+                  label: "Donors",
+                },
+                {
+                  icon: FaHeartbeat,
+                  number: stats.totalRequests
+                    ? `${stats.totalRequests.toLocaleString()}+`
+                    : "...",
+                  label: "Requests Made",
+                },
+                {
+                  icon: FaHospital,
+                  number: stats.totalFunding
+                    ? (() => {
+                        const amount = stats.totalFunding;
+                        if (amount >= 1000000)
+                          return `$${(amount / 1000000).toFixed(1)}M`;
+                        if (amount >= 1000)
+                          return `$${(amount / 1000).toFixed(1)}K`;
+                        return `$${Math.floor(amount)}`;
+                      })()
+                    : "...",
+                  label: "Total Funded",
+                },
               ].map((stat, index) => (
                 <div
                   key={index}
