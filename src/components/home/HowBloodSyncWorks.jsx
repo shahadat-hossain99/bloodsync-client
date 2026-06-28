@@ -52,7 +52,7 @@ export default function HowBloodSyncWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-4xl font-bold text-gray-900"
+            className="mt-4 text-3xl md:text-4xl font-bold text-gray-900"
           >
             How <span className="text-red-600">Blood</span>Sync Works
           </motion.h2>

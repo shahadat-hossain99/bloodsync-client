@@ -13,6 +13,7 @@ import {
   FaArrowDown,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import BloodRequestCard from "@/components/shared/BloodRequestCard";
 
 export default function PublicRequestsClient({ isLoggedIn }) {
   const router = useRouter();
@@ -97,52 +98,11 @@ export default function PublicRequestsClient({ isLoggedIn }) {
       {/* ── Grid of Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {visibleRequests.map((req) => (
-          <div
+          <BloodRequestCard
             key={req._id}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 relative overflow-visible hover:shadow-md transition-shadow duration-300 p-6"
-          >
-            {/* Blood Group Badge */}
-            <div className="absolute -top-3 -left-3 z-10">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white border-2 border-white shadow-md rounded-full text-xs font-bold">
-                <FaTint size={12} />
-                {req.bloodGroup}
-              </div>
-            </div>
-
-            {/* Header */}
-            <div className="flex flex-col items-start pt-4 pb-2">
-              <h3 className="text-xl font-semibold text-gray-900">
-                {req.recipientName}
-              </h3>
-              <p className="flex items-center gap-1 text-sm text-gray-500 mt-1">
-                <FaMapMarkerAlt className="text-red-400" size={12} />
-                {req.recipientDistrictName}, {req.recipientUpazilaName}
-              </p>
-            </div>
-
-            {/* Body */}
-            <div className="py-2 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaCalendar className="text-gray-400" size={14} />
-                <span>{new Date(req.donationDate).toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaClock className="text-gray-400" size={14} />
-                <span>{req.donationTime}</span>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="pt-4 mt-2 border-t border-gray-100">
-              <button
-                onClick={() => handleViewDetails(req._id)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
-              >
-                <FaEye size={14} />
-                View Details
-              </button>
-            </div>
-          </div>
+            req={req}
+            onViewDetails={handleViewDetails}
+          />
         ))}
       </div>
 
