@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import {
   FaSearch,
   FaTint,
@@ -13,6 +13,7 @@ import {
 import { useGeoData } from "@/hooks/useGeoData";
 import { searchDonorsAction } from "@/lib/action/search.action";
 import Image from "next/image";
+import { showToast } from "@/utils/toast";
 
 export default function SearchPage() {
   // 1. Load Geo Data
@@ -57,12 +58,12 @@ export default function SearchPage() {
       if (result.success) {
         setDonors(result.data);
         if (result.data.length === 0) {
-          toast.info("No donors found matching your criteria.");
+          showToast.info("No donors found matching your criteria.");
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.message || "Failed to search donors");
+      showToast.error(error.message || "Failed to search donors");
       setDonors([]);
     } finally {
       setLoading(false);

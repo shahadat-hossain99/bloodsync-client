@@ -15,14 +15,18 @@ export default function ClientLayout({ children }) {
       {!isDashboard && <Navbar />}
       <main className={isDashboard ? "flex-1" : ""}>{children}</main>
       {!isDashboard && <Footer />}
-      <ToastContainer
+      {/* <ToastContainer
         position="top-center"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop
-        closeOnClick
+        closeOnClick={false}
+        closeButton={false}
         theme="light"
-      />
+        toastClassName={() => ""}
+        bodyClassName={() => ""}
+        style={{ width: "auto", minWidth: 340, maxWidth: 420 }}
+      /> */}
     </AuthProvider>
   );
 }

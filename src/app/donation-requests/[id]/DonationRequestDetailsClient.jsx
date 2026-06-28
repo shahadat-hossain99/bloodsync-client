@@ -20,6 +20,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { showToast } from "@/utils/toast";
 // import { setDonationInProgress } from "@/lib/action/donetion";
 // import { donateBloodAction } from "@/lib/action/donation.action";
 
@@ -38,11 +39,11 @@ export default function DonationRequestDetailsClient({
   // Handle Donate Button Click
   const handleDonateClick = () => {
     if (isMyOwnRequest) {
-      toast.error("You cannot donate to your own request.");
+      showToast.error("You cannot donate to your own request.");
       return;
     }
     if (!isDonatable) {
-      toast.info(`This request is already ${request.status}.`);
+      showToast.info(`This request is already ${request.status}.`);
       return;
     }
     setIsModalOpen(true);
@@ -71,16 +72,16 @@ export default function DonationRequestDetailsClient({
       // const response = await donateBloodAction(request._id, payload);
 
       if (response.success) {
-        toast.success("You have successfully volunteered to donate! 🩸");
+        showToast.success("You have successfully volunteered to donate! 🩸");
         setIsModalOpen(false);
         // Refresh the page to show updated status
         router.refresh();
       } else {
-        toast.error(response.message || "Failed to confirm donation");
+        showToast.error(response.message || "Failed to confirm donation");
       }
     } catch (error) {
       console.error("Donation error:", error);
-      toast.error(error.message || "An error occurred. Please try again.");
+      showToast.error(error.message || "An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +91,7 @@ export default function DonationRequestDetailsClient({
     <>
       {/* ── Main Info Card ── */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-red-50 to-white">
+        <div className="p-6 border-b border-gray-200 bg-linear-to-r from-red-50 to-white">
           <div className="flex justify-between items-start flex-wrap gap-4">
             <h2 className="text-2xl font-bold text-gray-800">
               Request for {request.recipientName}

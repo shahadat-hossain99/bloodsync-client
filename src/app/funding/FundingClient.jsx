@@ -19,7 +19,8 @@ import {
   FaChevronRight,
   FaHeartbeat,
 } from "react-icons/fa";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { showToast } from "@/utils/toast";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
@@ -63,11 +64,13 @@ const CheckoutForm = ({ userId, amount, onSuccess, onCancel }) => {
           "POST",
         );
 
-        toast.success("🎉 Donation successful. Thank you for saving lives!");
+        showToast.success(
+          "🎉 Donation successful. Thank you for saving lives!",
+        );
         onSuccess();
       }
     } catch (error) {
-      toast.error(error.message || "Payment failed. Please try again.");
+      showToast.error(error.message || "Payment failed. Please try again.");
     } finally {
       setLoading(false);
     }

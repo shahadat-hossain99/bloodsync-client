@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import BloodRequestCard from "@/components/shared/BloodRequestCard";
+import { showToast } from "@/utils/toast";
 
 export default function PublicRequestsClient({ isLoggedIn }) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function PublicRequestsClient({ isLoggedIn }) {
         const data = await serverFetch("/api/donation-requests");
         setRequests(data);
       } catch (error) {
-        toast.error("Failed to load donation requests");
+        showToast.error("Failed to load donation requests");
         console.error(error);
       } finally {
         setLoading(false);

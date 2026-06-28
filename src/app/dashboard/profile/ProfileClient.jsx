@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { getUserById } from "@/lib/api/users";
 import { updateUserById } from "@/lib/action/users";
+import { showToast } from "@/utils/toast";
 
 // ✅ Receive the initial user data from the server
 export default function ProfileClient({ initialUser }) {
@@ -79,7 +80,7 @@ export default function ProfileClient({ initialUser }) {
         setFormData(loadedData);
         setOriginalData(loadedData);
       } catch (error) {
-        toast.error("Failed to load profile data");
+        showToast.error("Failed to load profile data");
         console.error(error);
       } finally {
         setLoading(false);
@@ -128,7 +129,7 @@ export default function ProfileClient({ initialUser }) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
+      showToast.error("Image size should be less than 5MB");
       return;
     }
 
@@ -138,10 +139,10 @@ export default function ProfileClient({ initialUser }) {
 
       if (result) {
         setFormData((prev) => ({ ...prev, image: result.url }));
-        toast.success("Avatar uploaded successfully!");
+        showToast.success("Avatar uploaded successfully!");
       }
     } catch (error) {
-      toast.error("Failed to upload avatar");
+      showToast.error("Failed to upload avatar");
       console.error(error);
     } finally {
       setIsUploading(false);
@@ -167,7 +168,7 @@ export default function ProfileClient({ initialUser }) {
 
       const response = await updateUserById(user.id, updatedData);
 
-      toast.success(response.message || "Profile updated successfully!");
+      showToast.success(response.message || "Profile updated successfully!");
 
       if (refreshSession) {
         await refreshSession();
@@ -175,7 +176,7 @@ export default function ProfileClient({ initialUser }) {
 
       setIsEditing(false);
     } catch (error) {
-      toast.error(error.message || "Failed to update profile");
+      showToast.error(error.message || "Failed to update profile");
     } finally {
       setIsSaving(false);
     }
@@ -341,7 +342,7 @@ export default function ProfileClient({ initialUser }) {
 
           {/* Text info - Centered on mobile, Left-aligned on desktop */}
           <div className="text-center sm:text-left">
-            <h3 className="text-lg font-semibold text-gray-800 break-words">
+            <h3 className="text-lg font-semibold text-gray-800 wrap-break-word">
               {formData.name}
             </h3>
             <p className="text-gray-500 break-all">{formData.email}</p>

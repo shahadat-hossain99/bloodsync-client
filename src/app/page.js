@@ -7,7 +7,6 @@ import MarqueeSection from "@/components/home/MarqueeSection";
 import WhyChooseBloodSync from "@/components/home/WhyChooseBloodSync";
 import { getUserSession } from "@/lib/core/session";
 import { getMarqueeData } from "@/lib/marquee";
-import { ToastContainer } from "react-toastify";
 
 async function getStats() {
   try {

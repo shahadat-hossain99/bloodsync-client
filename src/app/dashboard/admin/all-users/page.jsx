@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { showToast } from "@/utils/toast";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All Users" },
@@ -54,7 +55,7 @@ export default function AllUsersClient() {
         setTotalUsers(response.pagination.totalUsers);
       }
     } catch (error) {
-      toast.error("Failed to load users");
+      showToast.error("Failed to load users");
       console.error(error);
     } finally {
       setLoading(false);
@@ -92,7 +93,7 @@ export default function AllUsersClient() {
       console.log("🔍 Sending authId to backend:", targetUser?.authId);
 
       if (!targetUser || !targetUser.authId) {
-        toast.error("User Auth ID missing!");
+        showToast.error("User Auth ID missing!");
         setProcessingId(null);
         return;
       }
@@ -104,12 +105,12 @@ export default function AllUsersClient() {
       );
 
       if (response.success) {
-        toast.success(response.message || "User updated successfully!");
+        showToast.success(response.message || "User updated successfully!");
         fetchUsers(currentPage, statusFilter);
       }
     } catch (error) {
       console.error("🔥 Frontend Error:", error);
-      toast.error(error.message || "Failed to update user");
+      showToast.error(error.message || "Failed to update user");
     } finally {
       setProcessingId(null);
     }
@@ -211,12 +212,12 @@ export default function AllUsersClient() {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
                   {/* CHANGED: w-[220px] so User col gets enough room */}
-                  <th className="px-4 py-3 w-[220px]">User</th>
+                  <th className="px-4 py-3 w-55">User</th>
                   {/* CHANGED: hide Email on lg, show on xl */}
-                  <th className="px-4 py-3 w-[220px]">Email</th>
-                  <th className="px-4 py-3 w-[100px]">Role</th>
-                  <th className="px-4 py-3 w-[100px]">Status</th>
-                  <th className="px-4 py-3 text-right w-[80px]">Actions</th>
+                  <th className="px-4 py-3 w-55">Email</th>
+                  <th className="px-4 py-3 w-25">Role</th>
+                  <th className="px-4 py-3 w-25">Status</th>
+                  <th className="px-4 py-3 text-right w-20">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -236,7 +237,7 @@ export default function AllUsersClient() {
                       </div>
                     </td>
                     {/* CHANGED: hidden xl:table-cell */}
-                    <td className="px-4 py-4 w-[220px] text-gray-600">
+                    <td className="px-4 py-4 w-55 text-gray-600">
                       {user.email}
                     </td>
                     <td className="px-4 py-4">
