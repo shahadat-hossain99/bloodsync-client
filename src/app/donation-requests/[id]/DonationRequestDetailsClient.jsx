@@ -38,6 +38,12 @@ export default function DonationRequestDetailsClient({
 
   // Handle Donate Button Click
   const handleDonateClick = () => {
+    // ── blocked user check ──
+    if (currentUser?.status === "blocked") {
+      showToast.error("Account blocked", "You cannot donate. Contact support.");
+      return;
+    }
+
     if (isMyOwnRequest) {
       showToast.error("You cannot donate to your own request.");
       return;
