@@ -19,6 +19,7 @@ import {
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { showToast } from "@/utils/toast";
 
 export default function DonorDashboardClient({ userId }) {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function DonorDashboardClient({ userId }) {
         );
         setRequests(data);
       } catch (error) {
-        toast.error("Failed to load donation requests");
+        showToast.error("Failed to load donation requests");
         console.error(error);
       } finally {
         setLoading(false);
@@ -64,7 +65,7 @@ export default function DonorDashboardClient({ userId }) {
       );
 
       if (response.success) {
-        toast.success(`Request marked as ${newStatus}!`);
+        showToast.success(`Request marked as ${newStatus}!`);
 
         // Re-fetch the list immediately so the UI updates!
         const updatedData = await serverFetch(
@@ -73,7 +74,7 @@ export default function DonorDashboardClient({ userId }) {
         setRequests(updatedData);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to update status");
+      showToast.error(error.message || "Failed to update status");
     }
   };
 
@@ -96,7 +97,7 @@ export default function DonorDashboardClient({ userId }) {
       const role = session?.data?.user?.role || session?.user?.role;
 
       if (!userId) {
-        toast.error("User ID not found. Please log in again.");
+        showToast.error("User ID not found. Please log in again.");
         setIsDeleting(false);
         return;
       }
@@ -108,7 +109,7 @@ export default function DonorDashboardClient({ userId }) {
       );
 
       if (response.success) {
-        toast.success("Request deleted successfully");
+        showToast.success("Request deleted successfully");
         setRequests((prev) =>
           prev.filter((req) => req._id !== deletingRequestId),
         );
@@ -116,7 +117,7 @@ export default function DonorDashboardClient({ userId }) {
         setDeletingRequestId(null);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to delete request");
+      showToast.error(error.message || "Failed to delete request");
     } finally {
       setIsDeleting(false);
     }

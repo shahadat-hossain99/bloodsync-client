@@ -22,6 +22,7 @@ import {
 import { motion } from "framer-motion";
 import { BiSolidDonateBlood } from "react-icons/bi";
 import { Button } from "@heroui/react";
+import { showToast } from "@/utils/toast";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -64,7 +65,7 @@ export default function EditDonationRequestPage() {
         setUser(currentUser);
       } catch (error) {
         console.error("Failed to get session:", error);
-        toast.error("Please log in again");
+        showToast.error("Please log in again");
         router.push("/auth/login");
       }
     };
@@ -79,7 +80,7 @@ export default function EditDonationRequestPage() {
         const data = await serverFetch(`/api/users/${user.id}`);
         if (data.status === "blocked") {
           setIsUserBlocked(true);
-          toast.error(
+          showToast.error(
             "Your account has been blocked. You cannot edit donation requests.",
           );
         }
@@ -124,7 +125,7 @@ export default function EditDonationRequestPage() {
         });
       } catch (error) {
         console.error("Fetch error:", error);
-        toast.error("Failed to load request details");
+        showToast.error("Failed to load request details");
         router.push("/");
       } finally {
         setLoadingRequest(false);
@@ -190,42 +191,42 @@ export default function EditDonationRequestPage() {
 
     // Validation
     if (!formData.recipientName.trim()) {
-      toast.error("Recipient name is required");
+      showToast.error("Recipient name is required");
       return;
     }
     if (!formData.recipientDistrict) {
-      toast.error("Please select a district");
+      showToast.error("Please select a district");
       return;
     }
     if (!formData.recipientUpazila) {
-      toast.error("Please select an upazila");
+      showToast.error("Please select an upazila");
       return;
     }
     if (!formData.hospitalName.trim()) {
-      toast.error("Hospital name is required");
+      showToast.error("Hospital name is required");
       return;
     }
     if (!formData.fullAddress.trim()) {
-      toast.error("Full address is required");
+      showToast.error("Full address is required");
       return;
     }
     if (!formData.bloodGroup) {
-      toast.error("Please select a blood group");
+      showToast.error("Please select a blood group");
       return;
     }
     if (!formData.donationDate) {
-      toast.error("Please select a donation date");
+      showToast.error("Please select a donation date");
       return;
     }
     if (!formData.donationTime) {
-      toast.error("Please select a donation time");
+      showToast.error("Please select a donation time");
       return;
     }
     if (
       !formData.requestMessage.trim() ||
       formData.requestMessage.length < 20
     ) {
-      toast.error(
+      showToast.error(
         "Please write a detailed request message (minimum 20 characters)",
       );
       return;
@@ -233,12 +234,12 @@ export default function EditDonationRequestPage() {
 
     // Blocked user check
     if (isUserBlocked) {
-      toast.error("Your account is blocked. You cannot edit requests.");
+      showToast.error("Your account is blocked. You cannot edit requests.");
       return;
     }
 
     if (!user) {
-      toast.error("Please log in again");
+      showToast.error("Please log in again");
       return;
     }
 
@@ -273,12 +274,12 @@ export default function EditDonationRequestPage() {
       );
 
       if (response.success) {
-        toast.success("Donation request updated successfully!");
+        showToast.success("Donation request updated successfully!");
         setTimeout(() => {
           router.push("/dashboard/my-donation-requests"); // Redirect to donor dashboard
         }, 1500);
       } else {
-        toast.error(response.message || "Failed to update request");
+        showToast.error(response.message || "Failed to update request");
       }
     } catch (error) {
       console.error("Error updating donation request:", error);

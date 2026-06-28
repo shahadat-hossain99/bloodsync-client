@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import { BiSolidDonateBlood } from "react-icons/bi";
 import { Button } from "@heroui/react";
 import { createDonationRequest } from "@/lib/action/donationRequest";
+import { showToast } from "@/utils/toast";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -56,7 +57,7 @@ export default function CreateDonationRequestClient({ user }) {
         const data = await serverFetch(`/api/users/${user.id}`);
         if (data.status === "blocked") {
           setIsUserBlocked(true);
-          toast.error(
+          showToast.error(
             "Your account has been blocked. You cannot create donation requests.",
           );
         }
@@ -108,42 +109,42 @@ export default function CreateDonationRequestClient({ user }) {
 
     // Validation
     if (!formData.recipientName.trim()) {
-      toast.error("Recipient name is required");
+      showToast.error("Recipient name is required");
       return;
     }
     if (!formData.recipientDistrict) {
-      toast.error("Please select a district");
+      showToast.error("Please select a district");
       return;
     }
     if (!formData.recipientUpazila) {
-      toast.error("Please select an upazila");
+      showToast.error("Please select an upazila");
       return;
     }
     if (!formData.hospitalName.trim()) {
-      toast.error("Hospital name is required");
+      showToast.error("Hospital name is required");
       return;
     }
     if (!formData.fullAddress.trim()) {
-      toast.error("Full address is required");
+      showToast.error("Full address is required");
       return;
     }
     if (!formData.bloodGroup) {
-      toast.error("Please select a blood group");
+      showToast.error("Please select a blood group");
       return;
     }
     if (!formData.donationDate) {
-      toast.error("Please select a donation date");
+      showToast.error("Please select a donation date");
       return;
     }
     if (!formData.donationTime) {
-      toast.error("Please select a donation time");
+      showToast.error("Please select a donation time");
       return;
     }
     if (
       !formData.requestMessage.trim() ||
       formData.requestMessage.length < 20
     ) {
-      toast.error(
+      showToast.error(
         "Please write a detailed request message (minimum 20 characters)",
       );
       return;
@@ -151,7 +152,7 @@ export default function CreateDonationRequestClient({ user }) {
 
     // Blocked user check
     if (isUserBlocked) {
-      toast.error("Your account is blocked. You cannot create requests.");
+      showToast.error("Your account is blocked. You cannot create requests.");
       return;
     }
 
@@ -181,7 +182,10 @@ export default function CreateDonationRequestClient({ user }) {
       const response = await createDonationRequest(payload);
 
       if (response.success) {
-        toast.success("Donation request created successfully!");
+        showToast.success(
+          "Donation request created",
+          "Your blood request has been posted successfully.",
+        );
         // Reset form
         setFormData({
           recipientName: "",
@@ -199,9 +203,9 @@ export default function CreateDonationRequestClient({ user }) {
           router.push("/dashboard/my-donation-requests");
         }, 1500);
 
-        toast.success("Donation request created successfully!");
+        showToast.success("Donation request created successfully!");
       } else {
-        toast.error(response.message || "Failed to create request");
+        showToast.error(response.message || "Failed to create request");
       }
     } catch (error) {
       console.error("Error creating donation request:", error);
@@ -472,7 +476,7 @@ export default function CreateDonationRequestClient({ user }) {
           type="submit"
           isLoading={isSubmitting}
           isDisabled={isSubmitting}
-          className="w-full mt-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2 rounded-xl"
+          className="w-full mt-4 bg-linear-to-r from-red-600 to-red-700 text-white font-semibold shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2 rounded-xl"
           size="lg"
         >
           {!isSubmitting && <BiSolidDonateBlood size={22} />}

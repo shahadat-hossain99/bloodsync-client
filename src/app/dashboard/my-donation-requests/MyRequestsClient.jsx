@@ -17,6 +17,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { showToast } from "@/utils/toast";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All Statuses" },
@@ -65,7 +66,7 @@ export default function MyRequestsClient({ userId }) {
         setTotalRequests(response.pagination.totalRequests);
       }
     } catch (error) {
-      toast.error("Failed to load donation requests");
+      showToast.error("Failed to load donation requests");
       console.error(error);
     } finally {
       setLoading(false);
@@ -88,11 +89,11 @@ export default function MyRequestsClient({ userId }) {
       );
 
       if (response.success) {
-        toast.success(`Request marked as ${newStatus}!`);
+        showToast.success(`Request marked as ${newStatus}!`);
         fetchRequests(currentPage, statusFilter);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to update status");
+      showToast.error(error.message || "Failed to update status");
     }
   };
 
@@ -100,6 +101,7 @@ export default function MyRequestsClient({ userId }) {
   const openDeleteModal = (requestId) => {
     setDeletingRequestId(requestId);
     setIsDeleteModalOpen(true);
+    showToast.warning("Are You sure");
   };
 
   // 4. Handle Delete Request
@@ -115,13 +117,13 @@ export default function MyRequestsClient({ userId }) {
       );
 
       if (response.success) {
-        toast.success("Request deleted successfully");
+        showToast.success("Request deleted successfully");
         fetchRequests(currentPage, statusFilter);
         setIsDeleteModalOpen(false);
         setDeletingRequestId(null);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to delete request");
+      showToast.error(error.message || "Failed to delete request");
     } finally {
       setIsDeleting(false);
     }

@@ -26,6 +26,7 @@ import { signUp } from "@/lib/auth-client";
 import Image from "next/image";
 import ClientMetadata from "@/components/seo/ClientMetadata";
 import { serverMutation } from "@/lib/core/server";
+import { showToast } from "@/utils/toast";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const genders = ["Male", "Female", "Other"];
@@ -95,7 +96,7 @@ export default function RegisterPage() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
+        showToast.error("Image size should be less than 5MB");
         return;
       }
       setAvatar(file);
@@ -164,7 +165,7 @@ export default function RegisterPage() {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fix the errors in the form");
+      showToast.error("Please fix the errors in the form");
       return;
     }
 
@@ -179,7 +180,7 @@ export default function RegisterPage() {
           const uploadResult = await uploadImageToImgBB(avatar);
           avatarUrl = uploadResult.url;
         } catch (error) {
-          toast.error("Failed to upload avatar. Please try again.");
+          showToast.error("Failed to upload avatar. Please try again.");
           setIsSubmitting(false);
           setIsUploading(false);
           return;
@@ -252,7 +253,7 @@ export default function RegisterPage() {
 
         await serverMutation("/api/users", userPayload);
 
-        toast.success("Account created successfully");
+        showToast.success("Account created successfully");
       }
 
       // 3. Handle errors returned straight from the Auth Engine
@@ -265,13 +266,13 @@ export default function RegisterPage() {
       // Better Auth handles immediate background sessions perfectly.
       // If you don't use callbackURL parameter above, you can route them manually:
 
-      toast.success("Registration successful! Redirecting to login...");
+      showToast.success("Registration successful! Redirecting to login...");
       setTimeout(() => {
         router.push("/auth/signin");
       }, 2000);
     } catch (error) {
       console.error("Registration error encountered:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      showToast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
