@@ -36,7 +36,7 @@ export default function ContactSection() {
           <span className="inline-flex px-4 py-1 rounded-full bg-red-50 text-red-600 text-sm font-semibold border border-red-100">
             Get In Touch
           </span>
-          <h2 className="mt-4 text-4xl font-bold text-gray-900">
+          <h2 className="mt-4 text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
             We&apos;d Love to <span className="text-red-600">Hear</span> From
             You
           </h2>

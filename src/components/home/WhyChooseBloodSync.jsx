@@ -39,12 +39,21 @@ export default function WhyChooseBloodSync() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <motion.span
+            {/* <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="inline-flex px-4 py-1 rounded-full bg-white text-red-600 text-sm font-semibold border border-red-100"
+            >
+              Why BloodSync
+            </motion.span> */}
+            <motion.span
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex px-4 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-bold  tracking-wider shadow-sm"
             >
               Why BloodSync
             </motion.span>
@@ -54,7 +63,7 @@ export default function WhyChooseBloodSync() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-5 text-4xl font-bold text-gray-900 leading-tight"
+              className="mt-5 text-3xl  md:text-4xl font-black text-gray-900 leading-tight"
             >
               Why Thousands Trust <span className="text-red-600">Blood</span>
               Sync
