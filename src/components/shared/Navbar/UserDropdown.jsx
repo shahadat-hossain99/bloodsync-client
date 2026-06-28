@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Avatar } from "@heroui/react";
+import { FiChevronDown } from "react-icons/fi";
+import { MdAttachMoney, MdDashboard, MdLogout, MdPerson } from "react-icons/md";
 
 const DASHBOARD_PATHS = {
   admin: "/dashboard",
@@ -42,13 +44,13 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
       {/* ── Trigger ── */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all"
+        className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-gray-200 hover:border-red-200 hover:shadow-md transition-all duration-200 bg-white shadow-red-400"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         <Avatar
           size="sm"
-          className="cursor-pointer ring-2 ring-red-200 hover:ring-red-400 transition-all"
+          className="cursor-pointer ring-2 ring-red-200 hover:ring-red-400 transition-all md:w-9! md:h-9! "
         >
           <Avatar.Image src={user?.image || user?.avatar} />
           <Avatar.Fallback>
@@ -58,9 +60,15 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
                   .map((n) => n[0])
                   .join("")
                   .toUpperCase()
+                  .slice(0, 2)
               : "?"}
           </Avatar.Fallback>
         </Avatar>
+
+        <FiChevronDown
+          size={15}
+          className={`text-red-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       {/* ── Dropdown Panel ── */}
@@ -73,12 +81,22 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
       >
         {/* User info header */}
         <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
-          <p className="text-sm font-semibold text-gray-800 leading-none truncate">
+          <p className="text-sm font-semibold text-gray-800 truncate">
             {user?.name}
           </p>
-          <p className="text-xs text-gray-400 mt-1 truncate max-w-45">
-            {user?.email}
-          </p>
+          <p className="text-xs text-gray-400 mt-0.5 truncate">{user?.email}</p>
+          {/* Role badge যোগ করো */}
+          <span
+            className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+              user?.role === "admin"
+                ? "bg-purple-100 text-purple-700"
+                : user?.role === "volunteer"
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-green-100 text-green-700"
+            }`}
+          >
+            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
+          </span>
         </div>
 
         {/* Menu Items */}
@@ -88,20 +106,7 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors group"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
+            <MdDashboard className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
             Dashboard
           </Link>
 
@@ -110,21 +115,17 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors group"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
+            <MdPerson className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
             My Profile
+          </Link>
+
+          <Link
+            href="/funding"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors group"
+          >
+            <MdAttachMoney className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
+            Funding
           </Link>
 
           {/* Divider */}
@@ -140,43 +141,12 @@ export default function UserDropdown({ user, handleLogout, isLoggingOut }) {
           >
             {isLoggingOut ? (
               <>
-                <svg
-                  className="animate-spin h-4 w-4 text-red-500 shrink-0"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  />
-                </svg>
+                <MdLogout className="w-4 h-4 shrink-0" />
                 <span>Logging out...</span>
               </>
             ) : (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
+                <MdLogout className="w-4 h-4 shrink-0" />
                 <span>Logout</span>
               </>
             )}
