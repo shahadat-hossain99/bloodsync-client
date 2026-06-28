@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![BloodSync Banner](https://raw.githubusercontent.com/your-username/bloodsync-client/main/public/assets/nav-logo.png)
+![BloodSync Banner](https://raw.githubusercontent.com/shahadat-hossain99/bloodsync-client/main/public/assets/nav-logo.png)
 
 **A modern blood donation platform connecting donors with those in need.**
 
