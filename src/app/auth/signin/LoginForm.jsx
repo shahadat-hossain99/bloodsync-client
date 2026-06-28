@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { signIn } from "@/lib/auth-client";
+import { showToast } from "@/utils/toast";
 
 export default function LoginForm() {
   const router = useRouter(); // Initialize router
@@ -41,11 +42,11 @@ export default function LoginForm() {
 
       // Handle Better Auth Specific Errors (e.g., Wrong password, Invalid User)
       if (error) {
-        toast.error(error.message || "Invalid email or password.");
+        showToast.error(error.message || "Invalid email or password.");
         return;
       }
 
-      toast.success("Welcome back! Redirecting...");
+      showToast.success("Welcome back! Redirecting...");
 
       // Safety fallback route management if callbackURL is not handled implicitly
       setTimeout(() => {
@@ -55,7 +56,7 @@ export default function LoginForm() {
       }, 1000);
     } catch (error) {
       console.error("Login unexpected error:", error);
-      toast.error("An unexpected network error occurred.");
+      showToast.error("An unexpected network error occurred.");
     } finally {
       setIsLoading(false);
     }

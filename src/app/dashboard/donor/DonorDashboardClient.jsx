@@ -478,7 +478,7 @@ export default function DonorDashboardClient({ userId }) {
         {/* CHANGED: p-4 lg:p-6 */}
         <div className="p-4 lg:p-6 border-t border-gray-200 bg-gray-50 flex justify-end">
           <Link
-            href="/dashboard/donor"
+            href="/dashboard/my-donation-requests"
             className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors shadow-md shadow-red-500/20"
           >
             View All My Requests
