@@ -85,7 +85,7 @@ export default function DashboardSidebar({ user, isOpen, toggleSidebar }) {
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = "/";
+    window.location.href = "/auth/signin";
   };
 
   return (
@@ -127,14 +127,31 @@ export default function DashboardSidebar({ user, isOpen, toggleSidebar }) {
             >
               <Avatar.Image src={user?.image || user?.avatar} />
               <Avatar.Fallback>
-                {user?.name ? user?.name?.charAt(0).toUpperCase() || "U" : "?"}
+                {user?.name
+                  ? user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()
+                      .slice(0, 2)
+                  : "?"}
               </Avatar.Fallback>
             </Avatar>
             <div>
               <p className="text-sm font-semibold text-gray-800">
                 {user?.name}
               </p>
-              <p className="text-xs text-gray-500 capitalize">{role}</p>
+              <span
+                className={`inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                  role === "admin"
+                    ? "bg-purple-100 text-purple-700"
+                    : role === "volunteer"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-green-100 text-green-700"
+                }`}
+              >
+                {role.charAt(0).toUpperCase() + role.slice(1)}
+              </span>
             </div>
           </div>
         </div>
@@ -170,7 +187,7 @@ export default function DashboardSidebar({ user, isOpen, toggleSidebar }) {
         <div className="border-t border-gray-200 p-4">
           <Button
             onClick={handleLogout}
-            className="md:w-full inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 lg:py-4 bg-linear-to-r from-red-600 to-red-700 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg shadow-red-500/30 hover:shadow-red-500/40 hover:-translate-y-0.5 transition-all duration-300 group"
+            className="w-full inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 lg:py-4 bg-linear-to-r from-red-600 to-red-700 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg shadow-red-500/30 hover:shadow-red-500/40 hover:-translate-y-0.5 transition-all duration-300 group"
           >
             <FaSignOutAlt /> <span className="text-sm font-medium">Logout</span>
           </Button>
