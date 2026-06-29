@@ -129,7 +129,7 @@ export default function FundingClient({ currentUserId }) {
         setFunding(response.data);
       }
     } catch (error) {
-      toast.error("Failed to load funding history");
+      showToast.error("Failed to load funding history");
       console.error(error);
     } finally {
       setLoading(false);
@@ -160,7 +160,7 @@ export default function FundingClient({ currentUserId }) {
           setClientSecret(data.clientSecret);
         } catch (error) {
           console.error("Failed to get client secret", error);
-          toast.error("Failed to initialize payment. Try again.");
+          showToast.error("Failed to initialize payment. Try again.");
         } finally {
           setIsLoadingSecret(false);
         }
@@ -212,7 +212,7 @@ export default function FundingClient({ currentUserId }) {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 hover:scale-3d hover:scale-105"
           >
             <FaMoneyBillWave size={14} /> Give Fund
           </button>
