@@ -11,7 +11,7 @@ import {
 
 export default function BecomeHeroSection() {
   return (
-    <section className="py-20">
+    <section className="py-10 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -145,7 +145,7 @@ export default function BecomeHeroSection() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Link
-                  href="/register"
+                  href="/auth/register"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-red-600 font-semibold text-base rounded-xl hover:bg-red-50 transition-colors duration-300 shadow-lg shadow-white/20 group"
                 >
                   <FaHandHoldingHeart className="text-lg sm:text-xl" />
