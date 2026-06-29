@@ -16,6 +16,7 @@ import {
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { showToast } from "@/utils/toast";
+import Skeleton from "@/components/shared/LoadingUi/Skeleton";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All Users" },
@@ -149,22 +150,23 @@ export default function AllUsersClient() {
     );
 
   if (loading && users.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <FaSpinner className="animate-spin text-red-600 text-4xl" />
-      </div>
-    );
+    return <Skeleton />;
   }
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mx-auto w-full max-w-7xl min-w-0">
       {/* ── Header & Filters ── */}
       <div className="p-3 sm:p-4 lg:p-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div className="flex flex-wrap items-center gap-2 min-w-0">
-          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800">
-            All Users
+        <div className="flex flex-col min-w-0">
+          {" "}
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
+            Users <span className="text-red-600">Management</span>
           </h2>
-          <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
+          <p className="text-xs text-gray-400 mt-0.5">
+            Manage roles, permissions and account status across all registered
+            donors.
+          </p>
+          <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full w-fit mt-2">
             {totalUsers} total
           </span>
         </div>

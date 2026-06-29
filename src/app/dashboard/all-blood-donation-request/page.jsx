@@ -21,7 +21,7 @@ export default async function AllRequestsPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8 pt-4">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
           All <span className="text-red-600">Donation Requests</span>
         </h1>
         <p className="text-gray-500 mt-2 text-lg">
